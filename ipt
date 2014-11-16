@@ -1,0 +1,29 @@
+#!/bin/bash
+# ipt-kit: ipt
+# Copyright (c) 2014, phiLLip maDDux II (foospidy)
+# GNU GENERAL PUBLIC LICENSE
+# https://github.com/foospidy/ipt-kit/blob/master/LICENSE#
+
+whoami=`whoami`
+
+if [ 'root' != $whoami ];
+then
+	echo manage_ports must be run as root, run this command again as root, or sudo manage_ports.
+	exit;
+fi
+
+iptables=`which iptables`
+
+if [ -z $iptables ];
+then
+	echo iptables not found, install iptables and try again.
+	exit;
+fi
+
+echo
+echo
+
+iptables -t nat -L -n -v
+
+echo
+

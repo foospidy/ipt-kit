@@ -1,0 +1,75 @@
+#!/bin/bash
+# ipt-kit: ipt_set_tcp
+# Copyright (c) 2014, phiLLip maDDux II (foospidy)
+# GNU GENERAL PUBLIC LICENSE
+# https://github.com/foospidy/ipt-kit/blob/master/LICENSE#
+
+whoami=`whoami`
+
+if [ 'root' != $whoami ];
+then
+	echo manage_ports must be run as root, run this command again as root, or sudo manage_ports.
+	exit;
+fi
+
+iptables=`which iptables`
+
+if [ -z $iptables ];
+then
+	echo iptables not found, install iptables and try again.
+	exit;
+fi
+
+usage ()
+{
+	echo "usage: ipt_set_tcp <source port> <destination port> [interface]"
+}
+
+if [ -z $1 ];
+then
+	usage
+	exit;
+fi
+
+if [ -z $2 ];
+then
+	usage
+	exit;
+fi
+
+if [ -z $3 ];
+then
+	interface=eth0
+else
+	interface=$3
+fi
+
+if [[ ! $1 =~ ^[0-9]+$ ]];
+then
+	usage
+	exit;
+fi
+
+if [[ ! $2 =~ ^[0-9]+$ ]];
+then
+	usage
+	exit;
+fi
+
+if (( $1 > 1024 ));
+then
+	echo "You only need to redirect low ports, $1 is not a low port."
+	exit;
+fi
+
+echo
+echo
+
+iptables -t nat -A PREROUTING -i $interface -p tcp --dport $1 -j REDIRECT --to-port $2
+
+iptables-save
+
+iptables -t nat -L -n -v
+
+echo
+

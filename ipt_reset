@@ -1,0 +1,57 @@
+#!/bin/bash
+# ipt-kit: ipt_reset
+# Copyright (c) 2014, phiLLip maDDux II (foospidy)
+# GNU GENERAL PUBLIC LICENSE
+# https://github.com/foospidy/ipt-kit/blob/master/LICENSE#
+
+whoami=`whoami`
+
+if [ 'root' != $whoami ];
+then
+	echo manage_ports must be run as root, run this command again as root, or sudo manage_ports.
+	exit;
+fi
+
+iptables=`which iptables`
+
+if [ -z $iptables ];
+then
+	echo iptables not found, install iptables and try again.
+	exit;
+fi
+
+echo
+echo WARNING: this will blow away ALL iptables rules!
+read -p"To continue press y and then enter, otherwise just press enter>" continue
+
+if [ -z $continue ];
+then
+	echo iptables NOT reset!
+	exit;
+fi
+
+if [ 'y' != $continue ];
+then
+	echo iptables NOT reset!
+	exit;
+fi
+
+echo
+echo
+
+iptables -F
+iptables -X
+iptables -t nat -F
+iptables -t nat -X
+iptables -t mangle -F
+iptables -t mangle -X
+iptables -P INPUT ACCEPT
+iptables -P FORWARD ACCEPT
+iptables -P OUTPUT ACCEPT
+
+iptables-save
+
+iptables -t nat -L -n -v
+
+echo
+
