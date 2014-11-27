@@ -1,7 +1,7 @@
 ipt-kit
 =======
 
-Bash scripts to help setup port redirects with iptables. This can be helpful when you want to run a process on a lower port but without elevated privileges (e.g. root). These scripts were created for running HoneyPy (https://github.com/foospidy/HoneyPy) on low ports. They are independent from HoneyPy so can be used for any purpose. They are really just convenience scripts for modifing iptables. Only tested on Debian.
+Bash scripts to help setup port redirects with iptables. This can be helpful when you want to run a process on a lower port but without elevated privileges (e.g. root). These scripts were created for running HoneyPy (https://github.com/foospidy/HoneyPy) on low ports. They are independent from HoneyPy so can be used for any purpose. They are just convenience scripts for modifing iptables, and have only been tested on Debian.
 
 #### Scripts
 
