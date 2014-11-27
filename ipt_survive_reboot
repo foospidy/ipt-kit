@@ -1,0 +1,43 @@
+#!/bin/bash
+# ipt-kit: ipt_set_tcp
+# Copyright (c) 2014, phiLLip maDDux II (foospidy)
+# GNU GENERAL PUBLIC LICENSE
+# https://github.com/foospidy/ipt-kit/blob/master/LICENSE#
+#
+# this follows instructions from https://wiki.debian.org/iptables
+
+whoami=`whoami`
+
+if [ 'root' != $whoami ];
+then
+	echo manage_ports must be run as root, run this command again as root, or sudo manage_ports.
+	exit;
+fi
+
+iptables_save=`which iptables-save`
+
+if [ -z $iptables_save ];
+then
+        echo iptables-save not found, install iptables-save and try again.
+        exit;
+fi
+
+echo
+echo
+
+echo "This will overwrite /etc/network/if-pre-up.d/iptables."
+read -p "Are you sure you wish to continue? " -n 1 -r
+echo    # (optional) move to a new line
+if [[ $REPLY =~ ^[Yy]$ ]];
+then
+	iptables-save > /etc/iptables.up.rules
+	echo "#!/bin/bash" > /etc/network/if-pre-up.d/iptables
+	echo "/sbin/iptables-restore < /etc/iptables.up.rules" >> /etc/network/if-pre-up.d/iptables
+	chmod +x /etc/network/if-pre-up.d/iptables
+	echo "iptables saved!"
+else
+	echo "No changes made!"
+fi
+
+echo
+
