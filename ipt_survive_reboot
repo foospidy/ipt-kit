@@ -25,7 +25,7 @@ fi
 echo
 echo
 
-if [ $1 = "-y" ];
+if [ "$1" = "-y" ];
 then
 	REPLY='y'
 else
