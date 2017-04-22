@@ -25,9 +25,15 @@ fi
 echo
 echo
 
-echo "This will overwrite /etc/network/if-pre-up.d/iptables."
-read -p "Are you sure you wish to continue? " -n 1 -r
-echo    # (optional) move to a new line
+if [ $1 = "-y" ];
+then
+	REPLY='y'
+else
+	echo "This will overwrite /etc/network/if-pre-up.d/iptables."
+	read -p "Are you sure you wish to continue? " -n 1 -r
+	echo    # (optional) move to a new line
+fi
+
 if [[ $REPLY =~ ^[Yy]$ ]];
 then
 	iptables-save > /etc/iptables.up.rules
